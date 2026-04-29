@@ -2,6 +2,12 @@
 
 开源《杀戮尖塔 2》Mod 工作区。
 
+## 当前设计
+
+当前角色方向是“捧腹奶龙”，核心机制是“表情姿态”。初步定稿见 [docs/pengfu-nailong-design.md](docs/pengfu-nailong-design.md)。
+
+`InkSeerMod` 是早期临时工程骨架，后续实现应按“捧腹奶龙”设计替换，不再作为角色设定依据。
+
 ## 仓库规则
 
 - 手写文件不得超过 400 行。

@@ -1,0 +1,4 @@
+{
+  "INKSEERMOD-SEALED_INKSTONE.title": "封墨石",
+  "INKSEERMOD-SEALED_INKSTONE.description": "你的攻击额外造成 {ExtraDamage:diff()} 点伤害。"
+}
