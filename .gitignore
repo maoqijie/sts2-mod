@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/
+*.user
+*.suo
+
+# .NET / Godot C# 构建产物
+bin/
+obj/
+.vs/
+
+# STS2 本地运行产物
+mods/
+logs/
+*.log
+*.tmp
+
+# 本地打包二进制和游戏资源
+*.dll
+*.pdb
+*.pck
+*.zip
+
+# 私有/本地 Codex 工具
+.codex/
+skills/
+private/
+.env
+.env.*
