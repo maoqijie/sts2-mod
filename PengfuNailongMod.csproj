@@ -1,0 +1,70 @@
+<Project Sdk="Godot.NET.Sdk/4.5.1" InitialTargets="CheckDependencyPaths">
+  <Import Project="./Sts2PathDiscovery.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>true</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefaultItemExcludes>packages/**</DefaultItemExcludes>
+    <AppOutputBase>$(MSBuildProjectDirectory)/</AppOutputBase>
+    <PathMap>$(AppOutputBase)=./</PathMap>
+    <GodotDisabledSourceGenerators>GodotPluginsInitializer</GodotDisabledSourceGenerators>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);MSB3270</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup Condition="Exists('$(Sts2DataDir)')">
+    <Reference Include="0Harmony">
+      <HintPath>$(Sts2DataDir)/0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="sts2">
+      <HintPath>$(Sts2DataDir)/sts2.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Alchyr.Sts2.BaseLib" Version="3.1.0" PrivateAssets="All" />
+    <PackageReference Include="Alchyr.Sts2.ModAnalyzers" Version="0.1.7" />
+    <AdditionalFiles Include="PengfuNailongMod/localization/**/*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="PengfuNailongMod/**" />
+    <EmbeddedResource Remove="PengfuNailongMod/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="PengfuNailongMod.json" />
+    <None Include="project.godot" />
+    <None Include="export_presets.cfg" />
+    <None Include="PengfuNailongMod/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <LooseResource Include="PengfuNailongMod/**" />
+  </ItemGroup>
+
+  <Target Name="CheckDependencyPaths">
+    <Error
+      Text="Slay the Spire 2 data not found at path '$(Sts2DataDir)'"
+      Condition="'$(Sts2DataDir)' == '' or !Exists('$(Sts2DataDir)')" />
+  </Target>
+
+  <Target Name="CopyToModsFolderOnBuild" AfterTargets="PostBuildEvent">
+    <Message Text="Copying PengfuNailongMod loose-file artifacts to mods folder." Importance="high" />
+    <MakeDir Directories="$(ModsPath)$(MSBuildProjectName)/" />
+    <MakeDir Directories="@(LooseResource->'$(ModsPath)$(MSBuildProjectName)/%(RecursiveDir)')" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)/" />
+    <Copy SourceFiles="PengfuNailongMod.json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)/" />
+    <Copy
+      SourceFiles="@(LooseResource)"
+      DestinationFiles="@(LooseResource->'$(ModsPath)$(MSBuildProjectName)/%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
+</Project>

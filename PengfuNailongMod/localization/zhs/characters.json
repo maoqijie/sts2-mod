@@ -1,0 +1,16 @@
+{
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.title": "捧腹奶龙",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.titleObject": "捧腹奶龙",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.description": "一只情绪来得很快的小黄龙。\n他在大笑、惊吓、生气、得意和委屈之间来回切换，用圆滚滚的肚肚把危险弹回去。",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.pronounObject": "他",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.possessiveAdjective": "他的",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.pronounPossessive": "他的",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.pronounSubject": "他",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.cardsModifierTitle": "捧腹奶龙卡牌",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.cardsModifierDescription": "捧腹奶龙卡牌会出现在奖励和商店中。",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.aromaPrinciple": "肚肚",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.eventDeathPrevention": "还没笑完呢。",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.banter.alive.endTurnPing": "有点绷不住。",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.banter.dead.endTurnPing": "...",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.goldMonologue": "肚肚也要吃饱。"
+}

@@ -36,6 +36,48 @@
 - 起始版本只开放少量表情，降低学习成本。
 - 先保证规则简单，再用高稀有度卡牌和进阶遗物扩展构筑上限。
 
+## 角色形象与卡面美术 v0.1
+
+视觉方向采用“高一点的圆胖梨形 + 哑光手绘黏土质感”。
+
+风格要求：
+
+- 身体比例比初版 AI 草案更高，不能把旁边姿势画成矮胖 chibi。
+- 肚肚是视觉中心，角色动作优先围绕拍肚、抱肚、弹开、冲撞和变脸展开。
+- 表情要大、清楚、可读，符合大笑、惊吓、生气、得意、委屈五种状态。
+- 避免过度光滑的 3D 渲染感，保留手绘笔触和哑光黏土质感。
+- 卡面背景保持简单，重点放在角色动作和表情，不做复杂场景堆叠。
+
+概念总览：
+
+![角色形象总览](assets/pengfu-nailong/concepts/character-concept-revised.png)
+
+![卡面风格样张](assets/pengfu-nailong/concepts/card-style-revised.png)
+
+![Common 卡面总览](assets/pengfu-nailong/concepts/common-cards-revised.png)
+
+![Uncommon 卡面总览](assets/pengfu-nailong/concepts/uncommon-cards-revised.png)
+
+![Rare 卡面总览](assets/pengfu-nailong/concepts/rare-cards-revised.png)
+
+![表情图标和遗物总览](assets/pengfu-nailong/concepts/icons-and-relics-revised.png)
+
+当前草案资产：
+
+| 目录 | 数量 | 用途 |
+| --- | ---: | --- |
+| `assets/pengfu-nailong/drafts/cards/common/` | 14 | Common 卡面草案切片。 |
+| `assets/pengfu-nailong/drafts/cards/uncommon/` | 17 | Uncommon 卡面草案切片。 |
+| `assets/pengfu-nailong/drafts/cards/rare/` | 12 | Rare 卡面草案切片。 |
+| `assets/pengfu-nailong/drafts/icons/expressions/` | 5 | 表情 Power 图标草案切片。 |
+| `assets/pengfu-nailong/drafts/icons/relics/` | 5 | 遗物图标草案切片。 |
+
+美术说明：
+
+- 当前草案来自概念总览图裁切，用于占位和评审，不是最终发行品质。
+- 后续正式资源应逐张重绘或重新生成单图，避免接触表裁切造成边缘留白和构图不完整。
+- 进入正式发布前，需要再次确认用户参考图、AI 生成草案和最终重绘资产的授权边界。
+
 ## 核心机制：表情
 
 表情是捧腹奶龙的专属姿态系统。
@@ -341,12 +383,94 @@ Rare 设计注意：
 | 嘴硬挨揍 | Uncommon | 能力 | 1 | 每回合第一次在得意中受到攻击伤害时，获得 1 点力量。 |
 | 反面贴纸 | 稀有遗物 | 遗物 | - | 每回合第一次打出会被当前表情负面效果削弱的牌时，改为不受该次削弱影响。 |
 
+## 表情图标和 UI 表现 v0.1
+
+表情 UI 采用标准 Power 图标方案。
+
+基础规则：
+
+- 每个表情对应一个专属 Power。
+- 同一时间只显示一个表情 Power。
+- 进入新表情时，先移除旧表情 Power，再添加新表情 Power。
+- Power 图标使用对应表情头像。
+- Power tooltip 展示该表情的正面效果和负面效果。
+- 卡牌描述只写“进入某表情”，不在每张牌中重复解释表情完整效果。
+- 情绪万花筒、百变奶龙肚肚、情绪爆表等卡牌和遗物不从 UI 读取状态，而是从内部表情记录读取状态。
+
+图标方向：
+
+| 表情 | 图标表现 | 主色 |
+| --- | --- | --- |
+| 大笑 | 张嘴大笑脸 | 亮黄、白牙 |
+| 惊吓 | 圆眼张嘴脸 | 亮黄、浅蓝阴影 |
+| 生气 | 皱眉鼓脸 | 橙红、深眉 |
+| 得意 | 斜眼坏笑 | 金黄、深灰眉 |
+| 委屈 | 低眉含泪 | 淡蓝泪滴 |
+
+设计说明：
+
+- 该方案优先保证实现稳定和玩家可读性。
+- Power 图标是 v0.1 的唯一正式表情 UI，不额外实现自定义表情栏。
+- 后续如果机制稳定，再考虑添加角色旁边的大表情头像或表情切换动画。
+- 表情 Power 负责显示当前表情和 tooltip，不作为复杂战斗记录的唯一数据源。
+
+## 表情实现方式 v0.1
+
+表情规则采用 `ExpressionState` 状态模块管理，Power 只负责显示当前表情。
+
+### ExpressionState 职责
+
+`ExpressionState` 负责表情规则、战斗记录和触发判断：
+
+- 保存当前表情。
+- 记录本回合是否进入过表情。
+- 记录本回合是否随机进入过表情。
+- 记录本场战斗进入过哪些不同表情。
+- 判断本回合第一次进入表情。
+- 判断本场战斗第一次进入某种表情。
+- 统一处理进入新表情：覆盖旧表情、记录历史、刷新显示 Power。
+- 为卡牌、遗物、能力提供查询接口，不让它们直接依赖 UI Power 作为唯一状态来源。
+
+### Power 职责
+
+表情 Power 只负责玩家可见表现：
+
+- 显示当前表情图标。
+- 在 tooltip 中展示该表情的正面效果和负面效果。
+- 与 `ExpressionState` 的当前表情保持同步。
+
+表情 Power 不负责：
+
+- 记录本回合是否进入过表情。
+- 记录本场战斗进入过哪些表情。
+- 判断随机进入表情次数。
+- 判断奶龙肚肚、百变奶龙肚肚、情绪爆表、管不住脸等跨回合或跨战斗条件。
+
+### 接口边界
+
+后续实现时优先围绕这些语义接口设计，具体 API 名称以当前 BaseLib 和 STS2 版本为准：
+
+- `EnterExpression(expression, isRandom)`：进入指定表情，并声明是否为随机进入。
+- `ClearExpression()`：清除当前表情。
+- `CurrentExpression`：查询当前表情。
+- `HasEnteredExpressionThisTurn`：查询本回合是否进入过表情。
+- `HasRandomEnteredExpressionThisTurn`：查询本回合是否随机进入过表情。
+- `EnteredExpressionsThisCombat`：查询本场战斗进入过的不同表情集合。
+- `IsFirstExpressionThisTurn`：用于奶龙肚肚等每回合首次触发。
+- `IsFirstTimeExpressionThisCombat(expression)`：用于百变奶龙肚肚、情绪万花筒、百变表情包等新表情奖励。
+
+### 设计说明
+
+- 该方案避免把表情记录散落在卡牌、遗物和 Power 中。
+- Power 仍然是玩家看到的当前表情，但不是规则判断的唯一来源。
+- 所有进入表情的牌都应通过 `ExpressionState` 统一入口触发，避免遗漏遗物和能力联动。
+- 表情正负面数值修改优先通过统一判断处理，避免每张牌重复写“大笑加伤害、惊吓减伤害”等逻辑。
+
 ## 后续待设计
 
 后续还需要设计：
 
-- 表情图标和 UI 表现。
-- 表情实现方式：Power、角色状态字段，或专属状态管理模块。
+- 角色资源和动画实现细节。
 
 ## 当前结论
 
@@ -364,9 +488,15 @@ Rare 设计注意：
 - Uncommon 卡池 v0.1：17 张。
 - Rare 卡池 v0.1：12 张，方向为表情循环和随机强化。
 - 补充构筑包：肚皮防御包、随机失控包、负面反转包。
+- 表情 UI v0.1：标准 Power 图标方案。
+- 表情实现方式 v0.1：`ExpressionState` 负责规则和记录，Power 负责显示。
+- 视觉草案 v0.1：角色概念图、卡面总览图、表情图标和遗物图标草案已生成并切片。
 
 当前不定稿范围：
 
-- 表情图标和 UI 表现。
-- 表情实现方式。
-- 角色资源和动画实现细节。
+- 最终发行用单张卡图。
+- 角色动画实现细节。
+
+## 特别鸣谢
+
+- [FastAiCode](https://new.fastaicode.top)

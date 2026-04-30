@@ -5,9 +5,9 @@ config_version=5
 
 [application]
 
-config/name="InkSeerMod"
+config/name="PengfuNailongMod"
 config/features=PackedStringArray("4.5", "C#", "Mobile")
-config/icon="res://InkSeerMod/mod_image.png"
+config/icon="res://PengfuNailongMod/mod_image.png"
 
 [display]
 
@@ -19,7 +19,7 @@ window/stretch/aspect="expand"
 
 [dotnet]
 
-project/assembly_name="InkSeerMod"
+project/assembly_name="PengfuNailongMod"
 
 [rendering]
 

@@ -1,0 +1,12 @@
+{
+  "PENGFUNAILONGMOD-NAILONG_BELLY.title": "Nailong Belly",
+  "PENGFUNAILONGMOD-NAILONG_BELLY.description": "The first time each turn you enter an expression, gain 3 [gold]Block[/gold].",
+  "PENGFUNAILONGMOD-CHANGING_NAILONG_BELLY.title": "Changing Nailong Belly",
+  "PENGFUNAILONGMOD-CHANGING_NAILONG_BELLY.description": "The first time each turn you enter an expression, gain 3 [gold]Block[/gold].\nThe first time each combat you enter each expression, gain 1 Energy.",
+  "PENGFUNAILONGMOD-BELLY_AMULET.title": "Belly Amulet",
+  "PENGFUNAILONGMOD-BELLY_AMULET.description": "The first time each combat you take unblocked attack damage, gain 8 [gold]Block[/gold] and enter [gold]Fright[/gold].",
+  "PENGFUNAILONGMOD-CHAOS_BUTTON.title": "Chaos Button",
+  "PENGFUNAILONGMOD-CHAOS_BUTTON.description": "The first time each combat you randomly enter an expression, randomly enter a basic expression again and gain 1 Energy.",
+  "PENGFUNAILONGMOD-REVERSE_STICKER.title": "Reverse Sticker",
+  "PENGFUNAILONGMOD-REVERSE_STICKER.description": "The first time each turn you play a card weakened by your current expression, ignore that penalty."
+}

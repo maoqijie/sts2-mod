@@ -1,0 +1,16 @@
+{
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.title": "Pengfu Nailong",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.titleObject": "Pengfu Nailong",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.description": "A round little dragon whose feelings arrive all at once.\nHe swaps between expressions and bounces danger away with his soft belly.",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.pronounObject": "him",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.possessiveAdjective": "his",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.pronounPossessive": "his",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.pronounSubject": "he",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.cardsModifierTitle": "Pengfu Nailong Cards",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.cardsModifierDescription": "Pengfu Nailong cards will now appear in rewards and shops.",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.aromaPrinciple": "Belly",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.eventDeathPrevention": "The laugh is not over yet.",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.banter.alive.endTurnPing": "Hard to keep it together.",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.banter.dead.endTurnPing": "...",
+  "PENGFUNAILONGMOD-PENGFU_NAILONG.goldMonologue": "The belly needs snacks too."
+}

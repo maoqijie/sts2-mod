@@ -6,7 +6,13 @@
 
 当前角色方向是“捧腹奶龙”，核心机制是“表情姿态”。初步定稿见 [docs/pengfu-nailong-design.md](docs/pengfu-nailong-design.md)。
 
-`InkSeerMod` 是早期临时工程骨架，后续实现应按“捧腹奶龙”设计替换，不再作为角色设定依据。
+`PengfuNailongMod` 是当前实现工程，采用 loose-file 迭代模式（`has_pck=false`）。
+
+## 构建
+
+```bash
+dotnet build "PengfuNailongMod.csproj"
+```
 
 ## 仓库规则
 
@@ -18,3 +24,7 @@
 ## 私有工具
 
 本机 `sts2-modding` Codex skill 是私有工具，不属于这个开源仓库。
+
+## 特别鸣谢
+
+- [FastAiCode](https://new.fastaicode.top)
