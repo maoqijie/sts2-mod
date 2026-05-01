@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using PengfuNailongMod.PengfuNailongModCode.Mechanics;
+using PengfuNailongMod.PengfuNailongModCode.Visuals;
 
 namespace PengfuNailongMod.PengfuNailongModCode.Powers;
 
@@ -17,6 +18,17 @@ public abstract class NailongPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.None;
+}
+
+public abstract class TurnLimitedNailongPower : NailongPower
+{
+    public override async Task BeforeTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    {
+        if (side == Owner.Side)
+        {
+            await PowerCmd.Remove(this);
+        }
+    }
 }
 
 public sealed class StubbornHitPower : NailongPower
@@ -31,9 +43,11 @@ public sealed class StubbornHitPower : NailongPower
     {
         Player? player = Owner.Player;
         if (player == null || target != Owner || result.UnblockedDamage <= 0) return;
+        if (!DamageFilters.IsAttackDamage(props)) return;
         if (ExpressionState.Current(player) != ExpressionKind.Smug) return;
         if (!ExpressionState.TryUseStubbornHit(player)) return;
 
+        NailongActionDirector.Play(NailongActionKind.Power);
         await PowerCmd.Apply<StrengthPower>(Owner, 1, Owner, cardSource);
     }
 }
@@ -48,10 +62,8 @@ public sealed class OutOfControlShowPower : NailongPower;
 
 public sealed class FaceMasterPower : NailongPower;
 
-public sealed class SoftReboundPower : NailongPower
+public sealed class SoftReboundPower : TurnLimitedNailongPower
 {
-    public override PowerStackType StackType => PowerStackType.Counter;
-
     public override async Task AfterDamageReceived(
         PlayerChoiceContext choiceContext,
         Creature target,
@@ -61,13 +73,15 @@ public sealed class SoftReboundPower : NailongPower
         CardModel? cardSource)
     {
         if (target != Owner || dealer == null || result.UnblockedDamage <= 0) return;
+        if (!DamageFilters.IsAttackDamage(props)) return;
 
+        NailongActionDirector.Play(NailongActionKind.HeavyAttack);
         await CreatureCmd.Damage(choiceContext, dealer, result.UnblockedDamage, ValueProp.Unpowered, Owner, null);
         await PowerCmd.Remove(this);
     }
 }
 
-public sealed class BounceAwayPower : NailongPower
+public sealed class BounceAwayPower : TurnLimitedNailongPower
 {
     public override PowerStackType StackType => PowerStackType.Counter;
 
@@ -80,16 +94,16 @@ public sealed class BounceAwayPower : NailongPower
         CardModel? cardSource)
     {
         if (target != Owner || dealer == null || result.UnblockedDamage <= 0) return;
+        if (!DamageFilters.IsAttackDamage(props)) return;
 
+        NailongActionDirector.Play(NailongActionKind.HeavyAttack);
         await CreatureCmd.Damage(choiceContext, dealer, Amount, ValueProp.Unpowered, Owner, null);
         await PowerCmd.Remove(this);
     }
 }
 
-public sealed class BigReboundPower : NailongPower
+public sealed class BigReboundPower : TurnLimitedNailongPower
 {
-    public override PowerStackType StackType => PowerStackType.Counter;
-
     public override async Task AfterDamageReceived(
         PlayerChoiceContext choiceContext,
         Creature target,
@@ -99,15 +113,9 @@ public sealed class BigReboundPower : NailongPower
         CardModel? cardSource)
     {
         if (target != Owner || dealer == null || result.UnblockedDamage <= 0) return;
+        if (!DamageFilters.IsAttackDamage(props)) return;
 
+        NailongActionDirector.Play(NailongActionKind.HeavyAttack);
         await CreatureCmd.Damage(choiceContext, dealer, result.UnblockedDamage, ValueProp.Unpowered, Owner, null);
-    }
-
-    public override async Task BeforeTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
-    {
-        if (side == Owner.Side)
-        {
-            await PowerCmd.Remove(this);
-        }
     }
 }

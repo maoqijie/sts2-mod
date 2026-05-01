@@ -12,8 +12,10 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using PengfuNailongMod.PengfuNailongModCode.Character;
 using PengfuNailongMod.PengfuNailongModCode.Extensions;
+using PengfuNailongMod.PengfuNailongModCode.Keywords;
 using PengfuNailongMod.PengfuNailongModCode.Mechanics;
 using PengfuNailongMod.PengfuNailongModCode.Powers;
+using PengfuNailongMod.PengfuNailongModCode.Visuals;
 
 namespace PengfuNailongMod.PengfuNailongModCode.Cards;
 
@@ -48,28 +50,33 @@ public abstract class NailongCard(int cost, CardType type, CardRarity rarity, Ta
         }
     }
 
-    protected Task Attack(PlayerChoiceContext context, CardPlay play, int hitCount = 1)
+    protected Task Attack(PlayerChoiceContext context, CardPlay play, int hitCount = 1, NailongActionKind? actionKind = null)
     {
+        NailongActionDirector.Play(actionKind ?? (hitCount > 1 ? NailongActionKind.MultiHitAttack : NailongActionKind.Attack));
         return CommonActions.CardAttack(this, play, hitCount).Execute(context);
     }
 
-    protected async Task AttackAmount(PlayerChoiceContext context, Creature target, decimal amount)
+    protected Task AttackAmount(PlayerChoiceContext context, Creature target, decimal amount)
     {
-        await CreatureCmd.Damage(context, target, amount, ValueProp.Move, Owner.Creature, this);
+        NailongActionDirector.Play(NailongActionKind.HeavyAttack);
+        return CommonActions.CardAttack(this, target, amount, 1).Execute(context);
     }
 
-    protected Task Block(CardPlay play)
+    protected Task Block(CardPlay play, NailongActionKind actionKind = NailongActionKind.Block)
     {
+        NailongActionDirector.Play(actionKind);
         return CommonActions.CardBlock(this, play);
     }
 
     protected async Task GainBlock(decimal amount)
     {
+        NailongActionDirector.Play(NailongActionKind.BonusBlock);
         await CreatureCmd.GainBlock(Owner.Creature, amount, ValueProp.Unpowered, null, fast: true);
     }
 
     protected Task Draw(PlayerChoiceContext context, decimal count)
     {
+        NailongActionDirector.Play(NailongActionKind.Draw);
         return CardPileCmd.Draw(context, count, Owner);
     }
 
@@ -90,12 +97,29 @@ public abstract class NailongCard(int cost, CardType type, CardRarity rarity, Ta
 
     protected Task ApplySelf<T>(decimal amount) where T : PowerModel
     {
+        NailongActionDirector.Play(NailongActionKind.Power);
         return PowerCmd.Apply<T>(Owner.Creature, amount, Owner.Creature, this);
     }
 
-    protected Task ApplyTarget<T>(Creature target, decimal amount) where T : PowerModel
+    protected Task ApplyTarget<T>(Creature target, decimal amount, bool playCue = true) where T : PowerModel
     {
+        if (playCue)
+        {
+            NailongActionDirector.Play(NailongActionKind.Power);
+        }
+
         return PowerCmd.Apply<T>(target, amount, Owner.Creature, this);
+    }
+
+    protected async Task GainEnergy(decimal amount)
+    {
+        NailongActionDirector.Play(NailongActionKind.Energy);
+        await PlayerCmd.GainEnergy(amount, Owner);
+    }
+
+    protected void WithExpressionKeywords(params ExpressionKind[] kinds)
+    {
+        WithKeywords(kinds.Select(ExpressionKeywords.For).ToArray());
     }
 
     protected bool CurrentIs(ExpressionKind kind) => ExpressionState.Current(Owner) == kind;

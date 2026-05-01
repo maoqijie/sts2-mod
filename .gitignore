@@ -11,6 +11,11 @@
 bin/
 obj/
 .vs/
+__pycache__/
+.godot/
+generated/
+*.import
+*.uid
 
 # STS2 本地运行产物
 mods/
@@ -23,6 +28,9 @@ logs/
 *.pdb
 *.pck
 *.zip
+
+# 外部素材原始下载文件和元数据
+docs/assets/**/source/
 
 # 私有/本地 Codex 工具
 .codex/

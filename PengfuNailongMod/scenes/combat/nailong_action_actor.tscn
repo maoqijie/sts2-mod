@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/character_model_nailong.png" id="1_model"]
+
+[node name="NailongActionActor" type="Node2D"]
+
+[node name="BodyPivot" type="Node2D" parent="."]
+position = Vector2(0, -280)
+
+[node name="Body" type="Sprite2D" parent="BodyPivot"]
+texture = ExtResource("1_model")
+centered = true
+
+[node name="HeadPivot" type="Node2D" parent="BodyPivot"]
+position = Vector2(0, -230)
+
+[node name="BellyPivot" type="Node2D" parent="BodyPivot"]
+position = Vector2(0, -35)
+
+[node name="LeftHandPivot" type="Node2D" parent="BodyPivot"]
+position = Vector2(-105, -85)
+
+[node name="RightHandPivot" type="Node2D" parent="BodyPivot"]
+position = Vector2(105, -85)
+
+[node name="FxPivot" type="Node2D" parent="BodyPivot"]
+position = Vector2(60, -160)

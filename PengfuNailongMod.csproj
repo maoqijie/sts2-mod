@@ -6,10 +6,14 @@
     <ImplicitUsings>true</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefaultItemExcludes>packages/**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);packages/**;.godot/**;generated/**</DefaultItemExcludes>
     <AppOutputBase>$(MSBuildProjectDirectory)/</AppOutputBase>
     <PathMap>$(AppOutputBase)=./</PathMap>
-    <GodotDisabledSourceGenerators>GodotPluginsInitializer</GodotDisabledSourceGenerators>
+    <DisableImplicitGodotGeneratorReferences>true</DisableImplicitGodotGeneratorReferences>
+    <ModPckPath>$(MSBuildProjectDirectory)/$(MSBuildProjectName).pck</ModPckPath>
+    <GodotExportPreset>BasicExport</GodotExportPreset>
+    <ExportPckScript>$(MSBuildProjectDirectory)/tools/export_pck_macos.sh</ExportPckScript>
+    <AutoExportPck Condition="'$(AutoExportPck)' == ''">true</AutoExportPck>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -34,8 +38,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove=".godot/**" />
+    <Compile Remove="generated/**" />
     <Compile Remove="PengfuNailongMod/**" />
+    <EmbeddedResource Remove=".godot/**" />
+    <EmbeddedResource Remove="generated/**" />
     <EmbeddedResource Remove="PengfuNailongMod/**" />
+    <None Remove=".godot/**" />
+    <None Remove="generated/**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,25 +56,27 @@
     <None Include="PengfuNailongMod/**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <LooseResource Include="PengfuNailongMod/**" />
-  </ItemGroup>
-
   <Target Name="CheckDependencyPaths">
     <Error
       Text="Slay the Spire 2 data not found at path '$(Sts2DataDir)'"
       Condition="'$(Sts2DataDir)' == '' or !Exists('$(Sts2DataDir)')" />
   </Target>
 
+  <Target
+    Name="ExportPckBeforeInstall"
+    BeforeTargets="CopyToModsFolderOnBuild"
+    Condition="'$(AutoExportPck)' == 'true' and '$(IsOSX)' == 'true'">
+    <Error Text="PCK export script not found at '$(ExportPckScript)'." Condition="!Exists('$(ExportPckScript)')" />
+    <Exec Command="bash &quot;$(ExportPckScript)&quot; &quot;$(MSBuildProjectDirectory)&quot; &quot;$(GodotExportPreset)&quot; &quot;$(MSBuildProjectName)&quot;" />
+  </Target>
+
   <Target Name="CopyToModsFolderOnBuild" AfterTargets="PostBuildEvent">
-    <Message Text="Copying PengfuNailongMod loose-file artifacts to mods folder." Importance="high" />
+    <Message Text="Copying PengfuNailongMod PCK-first artifacts to mods folder." Importance="high" />
+    <Error Text="PengfuNailongMod.pck was not found. PCK-first install requires a fresh Godot export." Condition="!Exists('$(ModPckPath)')" />
+    <RemoveDir Directories="$(ModsPath)$(MSBuildProjectName)/" Condition="Exists('$(ModsPath)$(MSBuildProjectName)/')" />
     <MakeDir Directories="$(ModsPath)$(MSBuildProjectName)/" />
-    <MakeDir Directories="@(LooseResource->'$(ModsPath)$(MSBuildProjectName)/%(RecursiveDir)')" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)/" />
     <Copy SourceFiles="PengfuNailongMod.json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)/" />
-    <Copy
-      SourceFiles="@(LooseResource)"
-      DestinationFiles="@(LooseResource->'$(ModsPath)$(MSBuildProjectName)/%(RecursiveDir)%(Filename)%(Extension)')"
-      SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(ModPckPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)/" />
   </Target>
 </Project>

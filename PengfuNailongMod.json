@@ -4,7 +4,7 @@
   "author": "maoqijie",
   "description": "Adds the Pengfu Nailong character, expression stances, and an exclusive emotion-themed card pool.",
   "version": "v0.1.0",
-  "has_pck": false,
+  "has_pck": true,
   "has_dll": true,
   "dependencies": ["BaseLib"],
   "affects_gameplay": true

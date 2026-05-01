@@ -3,12 +3,17 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using PengfuNailongMod.PengfuNailongModCode.Cards;
 using PengfuNailongMod.PengfuNailongModCode.Mechanics;
+using PengfuNailongMod.PengfuNailongModCode.Visuals;
 
 namespace PengfuNailongMod.PengfuNailongModCode.Cards.Common;
 
 public sealed class BellyBounce : NailongCard
 {
-    public BellyBounce() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) => WithDamage(7, 3);
+    public BellyBounce() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    {
+        WithDamage(7, 3);
+        WithExpressionKeywords(ExpressionKind.Fright);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -19,7 +24,11 @@ public sealed class BellyBounce : NailongCard
 
 public sealed class PengfuCombo : NailongCard
 {
-    public PengfuCombo() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) => WithDamage(5, 2);
+    public PengfuCombo() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    {
+        WithDamage(5, 2);
+        WithExpressionKeywords(ExpressionKind.Laugh);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -30,7 +39,11 @@ public sealed class PengfuCombo : NailongCard
 
 public sealed class BellyCushion : NailongCard
 {
-    public BellyCushion() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) => WithBlock(7, 3);
+    public BellyCushion() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    {
+        WithBlock(7, 3);
+        WithExpressionKeywords(ExpressionKind.Laugh);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -39,9 +52,13 @@ public sealed class BellyCushion : NailongCard
     }
 }
 
-public sealed class CurlUp : NailongCard
+public sealed class CurlUp : NailongCard, IIgnoreExpressionBlockModifier
 {
-    public CurlUp() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) => WithBlock(6, 3);
+    public CurlUp() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    {
+        WithBlock(6, 3);
+        WithExpressionKeywords(ExpressionKind.Fright);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -52,7 +69,11 @@ public sealed class CurlUp : NailongCard
 
 public sealed class HardToHoldLaugh : NailongCard
 {
-    public HardToHoldLaugh() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) => WithCards(1, 1);
+    public HardToHoldLaugh() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    {
+        WithCards(1, 1);
+        WithExpressionKeywords(ExpressionKind.Laugh);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -63,7 +84,11 @@ public sealed class HardToHoldLaugh : NailongCard
 
 public sealed class FaceChaos : NailongCard
 {
-    public FaceChaos() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self) => WithKeywords(CardKeyword.Exhaust);
+    public FaceChaos() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self)
+    {
+        WithKeywords(CardKeyword.Exhaust);
+        WithExpressionKeywords(ExpressionKind.Laugh, ExpressionKind.Fright);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -81,7 +106,7 @@ public sealed class BellyCharge : NailongCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Attack(choiceContext, play);
+        await Attack(choiceContext, play, actionKind: NailongActionKind.HeavyAttack);
     }
 
     public override bool TryModifyEnergyCostInCombat(CardModel card, decimal originalCost, out decimal modifiedCost)
@@ -94,9 +119,13 @@ public sealed class BellyCharge : NailongCard
     }
 }
 
-public sealed class StartledFlailingSlap : NailongCard
+public sealed class StartledFlailingSlap : NailongCard, IIgnoreExpressionAttackModifier
 {
-    public StartledFlailingSlap() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) => WithDamage(8, 3);
+    public StartledFlailingSlap() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    {
+        WithDamage(8, 3);
+        WithExpressionKeywords(ExpressionKind.Laugh, ExpressionKind.Fright);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -117,9 +146,13 @@ public sealed class BellyHugCurl : NailongCard
     }
 }
 
-public sealed class Overreaction : NailongCard
+public sealed class Overreaction : NailongCard, IIgnoreExpressionBlockModifier
 {
-    public Overreaction() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) => WithBlock(4, 3);
+    public Overreaction() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    {
+        WithBlock(4, 3);
+        WithExpressionKeywords(ExpressionKind.Laugh, ExpressionKind.Fright);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -130,7 +163,11 @@ public sealed class Overreaction : NailongCard
 
 public sealed class BellyPad : NailongCard
 {
-    public BellyPad() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) => WithBlock(8, 3);
+    public BellyPad() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    {
+        WithBlock(8, 3);
+        WithExpressionKeywords(ExpressionKind.Fright);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -141,7 +178,11 @@ public sealed class BellyPad : NailongCard
 
 public sealed class SneezeFaceChange : NailongCard
 {
-    public SneezeFaceChange() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self) => WithKeywords(CardKeyword.Exhaust);
+    public SneezeFaceChange() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self)
+    {
+        WithKeywords(CardKeyword.Exhaust);
+        WithExpressionKeywords(ExpressionKind.Laugh, ExpressionKind.Fright);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {

@@ -11,6 +11,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using PengfuNailongMod.PengfuNailongModCode.Extensions;
 using PengfuNailongMod.PengfuNailongModCode.Mechanics;
+using PengfuNailongMod.PengfuNailongModCode.Visuals;
 
 namespace PengfuNailongMod.PengfuNailongModCode.Powers;
 
@@ -31,10 +32,15 @@ public abstract class ExpressionPowerBase : CustomPowerModel
         Creature? dealer,
         CardModel? cardSource)
     {
-        if (!props.IsPoweredAttack_() || dealer != Owner || cardSource?.Owner?.Creature != Owner)
+        if (!DamageFilters.IsAttackDamage(props)
+            || dealer != Owner
+            || cardSource?.Owner?.Creature != Owner
+            || cardSource.Type != CardType.Attack)
         {
             return 0m;
         }
+
+        if (cardSource is IIgnoreExpressionAttackModifier) return 0m;
 
         decimal modifier = ExpressionRules.AttackAdditive(Kind);
         if (modifier >= 0m) return modifier;
@@ -56,6 +62,8 @@ public abstract class ExpressionPowerBase : CustomPowerModel
             return 0m;
         }
 
+        if (cardSource is IIgnoreExpressionBlockModifier) return 0m;
+
         decimal modifier = ExpressionRules.BlockAdditive(Kind);
         if (modifier >= 0m) return modifier;
         if (cardSource is IIgnoreExpressionBlockPenalty) return 0m;
@@ -71,7 +79,7 @@ public abstract class ExpressionPowerBase : CustomPowerModel
         Creature? dealer,
         CardModel? cardSource)
     {
-        if (Kind == ExpressionKind.Smug && target == Owner && props.IsPoweredAttack_() && amount > 0m)
+        if (Kind == ExpressionKind.Smug && target == Owner && DamageFilters.IsAttackDamage(props) && amount > 0m)
         {
             return amount + 1m;
         }
@@ -94,11 +102,13 @@ public abstract class ExpressionPowerBase : CustomPowerModel
 
         if (Kind == ExpressionKind.Smug && ExpressionState.TryUseSmugDraw(player))
         {
+            NailongActionDirector.Play(NailongActionKind.Draw);
             await CardPileCmd.Draw(context, 1, player);
         }
 
         if (Kind == ExpressionKind.Angry && cardPlay.Card.Type == CardType.Attack && cardPlay.Target != null)
         {
+            NailongActionDirector.Play(NailongActionKind.Power);
             await PowerCmd.Apply<VulnerablePower>(cardPlay.Target, 1, Owner, cardPlay.Card);
         }
     }
@@ -109,6 +119,7 @@ public abstract class ExpressionPowerBase : CustomPowerModel
         if (Kind != ExpressionKind.Aggrieved || player == null || creature != Owner || amount <= 0m) return;
         if (!ExpressionState.TryUseAggrievedBlock(player)) return;
 
+        NailongActionDirector.Play(NailongActionKind.BonusBlock);
         await CreatureCmd.GainBlock(Owner, 4, ValueProp.Unpowered, null, fast: true);
     }
 }

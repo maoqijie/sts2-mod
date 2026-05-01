@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using PengfuNailongMod.PengfuNailongModCode.Cards;
 using PengfuNailongMod.PengfuNailongModCode.Mechanics;
 using PengfuNailongMod.PengfuNailongModCode.Powers;
+using PengfuNailongMod.PengfuNailongModCode.Visuals;
 
 namespace PengfuNailongMod.PengfuNailongModCode.Cards.Rare;
 
@@ -120,12 +121,13 @@ public sealed class HugeBellyRebound : NailongCard
     }
 }
 
-public sealed class CryToLaugh : NailongCard
+public sealed class CryToLaugh : NailongCard, IIgnoreExpressionBlockModifier
 {
     public CryToLaugh() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
         WithBlock(8, 3);
         WithCards(1);
+        WithExpressionKeywords(ExpressionKind.Aggrieved, ExpressionKind.Laugh);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -144,15 +146,17 @@ public sealed class EveryoneLaughs : NailongCard
         WithPower<WeakPower>(2, 1);
         WithPower<VulnerablePower>(2, 1);
         WithKeywords(CardKeyword.Exhaust);
+        WithExpressionKeywords(ExpressionKind.Laugh);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await Enter(choiceContext, ExpressionKind.Laugh);
+        NailongActionDirector.Play(NailongActionKind.Power);
         foreach (var enemy in Owner.Creature.CombatState!.HittableEnemies)
         {
-            await ApplyTarget<WeakPower>(enemy, DynamicVars.Power<WeakPower>().BaseValue);
-            await ApplyTarget<VulnerablePower>(enemy, DynamicVars.Vulnerable.BaseValue);
+            await ApplyTarget<WeakPower>(enemy, DynamicVars.Power<WeakPower>().BaseValue, playCue: false);
+            await ApplyTarget<VulnerablePower>(enemy, DynamicVars.Power<VulnerablePower>().BaseValue, playCue: false);
         }
     }
 }
@@ -165,6 +169,6 @@ public sealed class EmotionalOverload : NailongCard
     {
         await EnterRandomAny(choiceContext);
         await EnterRandomAny(choiceContext);
-        await PlayerCmd.GainEnergy(ExpressionState.EnteredExpressionCount(Owner), Owner);
+        await GainEnergy(ExpressionState.EnteredExpressionCount(Owner));
     }
 }

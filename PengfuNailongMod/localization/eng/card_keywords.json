@@ -1,2 +1,12 @@
 {
+  "PENGFUNAILONGMOD-LAUGH.title": "Laugh",
+  "PENGFUNAILONGMOD-LAUGH.description": "Attack cards deal 2 additional damage.\nSkill cards gain 2 less Block.",
+  "PENGFUNAILONGMOD-FRIGHT.title": "Fright",
+  "PENGFUNAILONGMOD-FRIGHT.description": "Skill cards gain 3 additional Block.\nAttack cards deal 2 less damage.",
+  "PENGFUNAILONGMOD-ANGRY.title": "Angry",
+  "PENGFUNAILONGMOD-ANGRY.description": "Attack cards deal 1 additional damage and apply 1 Vulnerable.\nSkill cards gain 3 less Block.",
+  "PENGFUNAILONGMOD-SMUG.title": "Smug",
+  "PENGFUNAILONGMOD-SMUG.description": "The first time each turn you play a card, draw 1 card.\nAttack damage taken is increased by 1.",
+  "PENGFUNAILONGMOD-AGGRIEVED.title": "Aggrieved",
+  "PENGFUNAILONGMOD-AGGRIEVED.description": "The first time each turn you gain Block, gain 4 more Block.\nAttack cards deal 3 less damage."
 }

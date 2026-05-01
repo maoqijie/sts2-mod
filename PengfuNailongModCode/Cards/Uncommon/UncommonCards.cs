@@ -7,12 +7,17 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using PengfuNailongMod.PengfuNailongModCode.Cards;
 using PengfuNailongMod.PengfuNailongModCode.Mechanics;
 using PengfuNailongMod.PengfuNailongModCode.Powers;
+using PengfuNailongMod.PengfuNailongModCode.Visuals;
 
 namespace PengfuNailongMod.PengfuNailongModCode.Cards.Uncommon;
 
-public sealed class AngryPuffedCheeks : NailongCard
+public sealed class AngryPuffedCheeks : NailongCard, IIgnoreExpressionBlockModifier
 {
-    public AngryPuffedCheeks() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) => WithBlock(5, 3);
+    public AngryPuffedCheeks() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    {
+        WithBlock(5, 3);
+        WithExpressionKeywords(ExpressionKind.Angry);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -21,20 +26,28 @@ public sealed class AngryPuffedCheeks : NailongCard
     }
 }
 
-public sealed class AngryBellySlap : NailongCard
+public sealed class AngryBellySlap : NailongCard, IIgnoreExpressionAttackModifier
 {
-    public AngryBellySlap() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) => WithDamage(10, 4);
+    public AngryBellySlap() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    {
+        WithDamage(10, 4);
+        WithExpressionKeywords(ExpressionKind.Angry);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await Enter(choiceContext, ExpressionKind.Angry);
-        await Attack(choiceContext, play);
+        await Attack(choiceContext, play, actionKind: NailongActionKind.HeavyAttack);
     }
 }
 
 public sealed class SmugHandsOnHips : NailongCard
 {
-    public SmugHandsOnHips() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) => WithCards(1, 1);
+    public SmugHandsOnHips() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    {
+        WithCards(1, 1);
+        WithExpressionKeywords(ExpressionKind.Smug);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -45,7 +58,11 @@ public sealed class SmugHandsOnHips : NailongCard
 
 public sealed class OverconfidentDraw : NailongCard
 {
-    public OverconfidentDraw() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) => WithCards(2, 1);
+    public OverconfidentDraw() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    {
+        WithCards(2, 1);
+        WithExpressionKeywords(ExpressionKind.Smug);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -56,7 +73,11 @@ public sealed class OverconfidentDraw : NailongCard
 
 public sealed class TearyBlock : NailongCard
 {
-    public TearyBlock() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) => WithBlock(9, 3);
+    public TearyBlock() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    {
+        WithBlock(9, 3);
+        WithExpressionKeywords(ExpressionKind.Aggrieved);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -67,19 +88,24 @@ public sealed class TearyBlock : NailongCard
 
 public sealed class TearyWeakAura : NailongCard
 {
-    public TearyWeakAura() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies) => WithPower<WeakPower>(2, 1);
+    public TearyWeakAura() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies)
+    {
+        WithPower<WeakPower>(2, 1);
+        WithExpressionKeywords(ExpressionKind.Aggrieved);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await Enter(choiceContext, ExpressionKind.Aggrieved);
+        NailongActionDirector.Play(NailongActionKind.Power);
         foreach (var enemy in Owner.Creature.CombatState!.HittableEnemies)
         {
-            await ApplyTarget<WeakPower>(enemy, DynamicVars.Power<WeakPower>().BaseValue);
+            await ApplyTarget<WeakPower>(enemy, DynamicVars.Power<WeakPower>().BaseValue, playCue: false);
         }
     }
 }
 
-public sealed class EmotionalBreakdown : NailongCard
+public sealed class EmotionalBreakdown : NailongCard, IIgnoreExpressionAttackModifier
 {
     public EmotionalBreakdown() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) => WithDamage(7, 3);
 
@@ -101,7 +127,7 @@ public sealed class ExpressionMasks : NailongCard
     }
 }
 
-public sealed class DeepBreath : NailongCard
+public sealed class DeepBreath : NailongCard, IIgnoreExpressionBlockModifier
 {
     public DeepBreath() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
@@ -119,7 +145,11 @@ public sealed class DeepBreath : NailongCard
 
 public sealed class LaughingCounter : NailongCard
 {
-    public LaughingCounter() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) => WithDamage(9, 3);
+    public LaughingCounter() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    {
+        WithDamage(9, 3);
+        WithExpressionKeywords(ExpressionKind.Laugh, ExpressionKind.Smug);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -137,12 +167,13 @@ public sealed class LaughingCounter : NailongCard
     }
 }
 
-public sealed class FrightenedBounceAway : NailongCard
+public sealed class FrightenedBounceAway : NailongCard, IIgnoreExpressionBlockModifier
 {
     public FrightenedBounceAway() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         WithBlock(6, 3);
         WithPower<BounceAwayPower>(4, 2);
+        WithExpressionKeywords(ExpressionKind.Fright);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -160,7 +191,7 @@ public sealed class BellyChargeEnergy : NailongCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await EnterRandomAny(choiceContext);
-        await PlayerCmd.GainEnergy(DynamicVars.Energy.BaseValue, Owner);
+        await GainEnergy(DynamicVars.Energy.BaseValue);
     }
 }
 
@@ -181,7 +212,11 @@ public sealed class SoftRebound : NailongCard
 
 public sealed class RollingDefenseLine : NailongCard
 {
-    public RollingDefenseLine() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self) => WithPower<RollingDefenseLinePower>(1);
+    public RollingDefenseLine() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    {
+        WithPower<RollingDefenseLinePower>(1);
+        WithExpressionKeywords(ExpressionKind.Fright, ExpressionKind.Aggrieved);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -202,9 +237,13 @@ public sealed class UncontrolledFace : NailongCard
     }
 }
 
-public sealed class LaughOrFrightAttack : NailongCard
+public sealed class LaughOrFrightAttack : NailongCard, IIgnoreExpressionAttackModifier
 {
-    public LaughOrFrightAttack() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) => WithDamage(9, 3);
+    public LaughOrFrightAttack() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    {
+        WithDamage(9, 3);
+        WithExpressionKeywords(ExpressionKind.Laugh, ExpressionKind.Fright);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -215,7 +254,11 @@ public sealed class LaughOrFrightAttack : NailongCard
 
 public sealed class SmugHitStrength : NailongCard
 {
-    public SmugHitStrength() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self) => WithPower<StubbornHitPower>(1);
+    public SmugHitStrength() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    {
+        WithPower<StubbornHitPower>(1);
+        WithExpressionKeywords(ExpressionKind.Smug);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {

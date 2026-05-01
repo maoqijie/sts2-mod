@@ -1,12 +1,17 @@
 {
   "PENGFUNAILONGMOD-NAILONG_BELLY.title": "奶龙肚肚",
   "PENGFUNAILONGMOD-NAILONG_BELLY.description": "每回合第一次进入表情时，获得 3 点[gold]格挡[/gold]。",
+  "PENGFUNAILONGMOD-NAILONG_BELLY.flavor": "圆滚滚的肚肚轻轻一弹，坏心情就被弹远了。",
   "PENGFUNAILONGMOD-CHANGING_NAILONG_BELLY.title": "百变奶龙肚肚",
   "PENGFUNAILONGMOD-CHANGING_NAILONG_BELLY.description": "每回合第一次进入表情时，获得 3 点[gold]格挡[/gold]。\n每场战斗中每第一次进入一种表情时，获得 1 点能量。",
+  "PENGFUNAILONGMOD-CHANGING_NAILONG_BELLY.flavor": "它的肚肚会跟着表情变来变去，连危险也摸不准方向。",
   "PENGFUNAILONGMOD-BELLY_AMULET.title": "肚皮护符",
   "PENGFUNAILONGMOD-BELLY_AMULET.description": "每场战斗第一次受到未被格挡的攻击伤害时，获得 8 点[gold]格挡[/gold]并进入[gold]惊吓[/gold]。",
+  "PENGFUNAILONGMOD-BELLY_AMULET.flavor": "贴在肚皮上的小护符，关键时刻总能吓出一层软垫。",
   "PENGFUNAILONGMOD-CHAOS_BUTTON.title": "失控按钮",
   "PENGFUNAILONGMOD-CHAOS_BUTTON.description": "每场战斗第一次随机进入表情时，额外随机进入一次基础表情，并获得 1 点能量。",
+  "PENGFUNAILONGMOD-CHAOS_BUTTON.flavor": "千万别按。按下去以后，奶龙自己也不知道会发生什么。",
   "PENGFUNAILONGMOD-REVERSE_STICKER.title": "反面贴纸",
-  "PENGFUNAILONGMOD-REVERSE_STICKER.description": "每回合第一次打出会被当前表情负面效果削弱的牌时，不受该次削弱影响。"
+  "PENGFUNAILONGMOD-REVERSE_STICKER.description": "每回合第一次打出会被当前表情负面效果削弱的牌时，不受该次削弱影响。",
+  "PENGFUNAILONGMOD-REVERSE_STICKER.flavor": "一张贴反了的表情贴纸，偏偏能把坏效果也贴反。"
 }

@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using PengfuNailongMod.PengfuNailongModCode.Powers;
 using PengfuNailongMod.PengfuNailongModCode.Relics;
+using PengfuNailongMod.PengfuNailongModCode.Visuals;
 
 namespace PengfuNailongMod.PengfuNailongModCode.Mechanics;
 
@@ -71,14 +72,22 @@ public static class ExpressionState
         state.RandomEnteredThisTurn |= isRandom;
         state.EnteredThisCombat.Add(kind);
 
+        NailongActionDirector.PlayCue(isRandom ? NailongActionKind.RandomExpression : NailongActionKind.ExpressionShift);
         await ReplaceExpressionPower(player, kind);
+        NailongActionDirector.PlayExpression(kind);
         await TriggerExpressionSideEffects(context, source, player, kind, isRandom, firstThisTurn, firstThisCombat);
     }
 
     public static async Task Clear(Player player)
     {
         PlayerExpressionState state = Get(player);
+        bool hadExpression = state.Current != null;
         state.Current = null;
+        if (hadExpression)
+        {
+            NailongActionDirector.Play(NailongActionKind.ClearExpression);
+        }
+
         await PowerCmd.Remove<LaughExpressionPower>(player.Creature);
         await PowerCmd.Remove<FrightExpressionPower>(player.Creature);
         await PowerCmd.Remove<AngryExpressionPower>(player.Creature);
@@ -119,9 +128,13 @@ public static class ExpressionState
         if (cardSource?.Pile?.Type != PileType.Play) return false;
 
         PlayerExpressionState state = Get(player);
-        if (state.ReverseStickerUsed) return false;
+        if (state.ReverseStickerUsed)
+        {
+            return ReferenceEquals(state.ReverseStickerCard, cardSource);
+        }
 
         state.ReverseStickerUsed = true;
+        state.ReverseStickerCard = cardSource;
         return true;
     }
 
@@ -146,21 +159,25 @@ public static class ExpressionState
 
         if (firstThisCombat && HasUsableRelic<ChangingNailongBelly>(player))
         {
+            NailongActionDirector.Play(NailongActionKind.Energy);
             await PlayerCmd.GainEnergy(1, player);
         }
 
         if (firstThisCombat && player.Creature.HasPower<EmotionKaleidoscopePower>())
         {
+            NailongActionDirector.Play(NailongActionKind.Draw);
             await CardPileCmd.Draw(context, 1, player);
         }
 
         if (firstThisTurn && firstThisCombat && player.Creature.HasPower<HundredFacesPower>())
         {
+            NailongActionDirector.Play(NailongActionKind.Energy);
             await PlayerCmd.GainEnergy(1, player);
         }
 
         if (isRandom && player.Creature.HasPower<OutOfControlShowPower>())
         {
+            NailongActionDirector.Play(NailongActionKind.Power);
             await PowerCmd.Apply<MegaCrit.Sts2.Core.Models.Powers.StrengthPower>(player.Creature, 1, player.Creature, source);
         }
 
@@ -168,8 +185,9 @@ public static class ExpressionState
         if (isRandom && HasUsableRelic<ChaosButton>(player) && !state.ChaosButtonUsed)
         {
             state.ChaosButtonUsed = true;
+            NailongActionDirector.Play(NailongActionKind.Energy);
             await PlayerCmd.GainEnergy(1, player);
-            await Enter(context, source, player, RandomBasic(), isRandom: false);
+            await Enter(context, source, player, RandomBasic(), isRandom: true);
         }
     }
 
@@ -203,6 +221,7 @@ public static class ExpressionState
 
     private static async Task GainBlock(Player player, decimal amount)
     {
+        NailongActionDirector.Play(NailongActionKind.BonusBlock);
         await CreatureCmd.GainBlock(player.Creature, amount, ValueProp.Unpowered, null, fast: true);
     }
 
@@ -249,6 +268,7 @@ public static class ExpressionState
         public bool AggrievedBlockUsed { get; set; }
         public bool StubbornHitUsed { get; set; }
         public bool ReverseStickerUsed { get; set; }
+        public CardModel? ReverseStickerCard { get; set; }
         public bool ChaosButtonUsed { get; set; }
         public HashSet<ExpressionKind> EnteredThisCombat { get; } = [];
 
@@ -270,6 +290,7 @@ public static class ExpressionState
             AggrievedBlockUsed = false;
             StubbornHitUsed = false;
             ReverseStickerUsed = false;
+            ReverseStickerCard = null;
         }
     }
 }

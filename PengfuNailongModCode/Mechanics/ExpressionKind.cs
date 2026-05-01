@@ -12,3 +12,7 @@ public enum ExpressionKind
 public interface IIgnoreExpressionAttackPenalty;
 
 public interface IIgnoreExpressionBlockPenalty;
+
+public interface IIgnoreExpressionAttackModifier;
+
+public interface IIgnoreExpressionBlockModifier;

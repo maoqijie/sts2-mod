@@ -1,2 +1,12 @@
 {
+  "PENGFUNAILONGMOD-LAUGH.title": "大笑",
+  "PENGFUNAILONGMOD-LAUGH.description": "攻击牌额外造成 2 点伤害。\n技能牌获得的格挡减少 2。",
+  "PENGFUNAILONGMOD-FRIGHT.title": "惊吓",
+  "PENGFUNAILONGMOD-FRIGHT.description": "技能牌额外获得 3 点格挡。\n攻击牌造成的伤害减少 2。",
+  "PENGFUNAILONGMOD-ANGRY.title": "生气",
+  "PENGFUNAILONGMOD-ANGRY.description": "攻击牌额外造成 1 点伤害，并给予目标 1 层易伤。\n技能牌获得的格挡减少 3。",
+  "PENGFUNAILONGMOD-SMUG.title": "得意",
+  "PENGFUNAILONGMOD-SMUG.description": "每回合第一次打出牌后，抽 1 张牌。\n受到攻击伤害增加 1。",
+  "PENGFUNAILONGMOD-AGGRIEVED.title": "委屈",
+  "PENGFUNAILONGMOD-AGGRIEVED.description": "每回合第一次获得格挡时，额外获得 4 点格挡。\n攻击牌造成的伤害减少 3。"
 }

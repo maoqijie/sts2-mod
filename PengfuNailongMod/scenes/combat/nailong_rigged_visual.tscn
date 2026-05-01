@@ -1,0 +1,96 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/rig/base_underlay.png" id="0_base"]
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/rig/body.png" id="1_body"]
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/rig/belly.png" id="2_belly"]
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/rig/head.png" id="3_head"]
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/rig/left_arm.png" id="4_left_arm"]
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/rig/right_arm.png" id="5_right_arm"]
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/rig/left_hand.png" id="6_left_hand"]
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/rig/right_hand.png" id="7_right_hand"]
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/rig/left_leg.png" id="8_left_leg"]
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/rig/right_leg.png" id="9_right_leg"]
+
+[node name="NailongRiggedVisual" type="Node2D"]
+
+[node name="RootBone" type="Node2D" parent="."]
+
+[node name="LeftLegBone" type="Node2D" parent="RootBone"]
+position = Vector2(-55, 118)
+z_index = 20
+
+[node name="LeftLeg" type="Sprite2D" parent="RootBone/LeftLegBone"]
+visible = false
+position = Vector2(-4.5, 39.5)
+texture = ExtResource("8_left_leg")
+
+[node name="RightLegBone" type="Node2D" parent="RootBone"]
+position = Vector2(60, 115)
+z_index = 21
+
+[node name="RightLeg" type="Sprite2D" parent="RootBone/RightLegBone"]
+visible = false
+position = Vector2(2, 36)
+texture = ExtResource("9_right_leg")
+
+[node name="BodyBone" type="Node2D" parent="RootBone"]
+position = Vector2(0, 16)
+z_index = 22
+
+[node name="BaseBody" type="Sprite2D" parent="RootBone/BodyBone"]
+position = Vector2(0, -16)
+z_index = 0
+texture = ExtResource("0_base")
+
+[node name="Body" type="Sprite2D" parent="RootBone/BodyBone"]
+visible = false
+position = Vector2(-5, 9.5)
+texture = ExtResource("1_body")
+
+[node name="BellyBone" type="Node2D" parent="RootBone"]
+position = Vector2(10, 23)
+z_index = 23
+
+[node name="Belly" type="Sprite2D" parent="RootBone/BellyBone"]
+position = Vector2(0, 0)
+texture = ExtResource("2_belly")
+
+[node name="LeftArmBone" type="Node2D" parent="RootBone"]
+position = Vector2(-80, -82)
+z_index = 24
+
+[node name="LeftArm" type="Sprite2D" parent="RootBone/LeftArmBone"]
+position = Vector2(8, 52)
+texture = ExtResource("4_left_arm")
+
+[node name="RightArmBone" type="Node2D" parent="RootBone"]
+position = Vector2(68, -82)
+z_index = 24
+
+[node name="RightArm" type="Sprite2D" parent="RootBone/RightArmBone"]
+position = Vector2(15.5, 50)
+texture = ExtResource("5_right_arm")
+
+[node name="LeftHandBone" type="Node2D" parent="RootBone"]
+position = Vector2(-55, 40)
+z_index = 25
+
+[node name="LeftHand" type="Sprite2D" parent="RootBone/LeftHandBone"]
+position = Vector2(6, 14.5)
+texture = ExtResource("6_left_hand")
+
+[node name="RightHandBone" type="Node2D" parent="RootBone"]
+position = Vector2(80, 38)
+z_index = 25
+
+[node name="RightHand" type="Sprite2D" parent="RootBone/RightHandBone"]
+position = Vector2(1, 8)
+texture = ExtResource("7_right_hand")
+
+[node name="HeadBone" type="Node2D" parent="RootBone"]
+position = Vector2(10, -94)
+z_index = 26
+
+[node name="Head" type="Sprite2D" parent="RootBone/HeadBone"]
+position = Vector2(-4.5, -64)
+texture = ExtResource("3_head")

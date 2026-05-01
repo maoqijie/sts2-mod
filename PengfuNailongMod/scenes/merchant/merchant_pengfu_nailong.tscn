@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://PengfuNailongMod/images/charui/merchant_nailong.png" id="1_merchant"]
+
+[node name="MerchantPengfuNailong" type="Sprite2D"]
+texture = ExtResource("1_merchant")
+centered = true
